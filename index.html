@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="style.css" rel="stylesheet">
+    </head>
+    <body>
+        <h5 class="data" id="sent"></h5>
+        <h5 class="data" id="distance"></h5>
+        <div class="direction"></div>
+    </body>
+    <script>
+        var keyPressed = {};
+        document.addEventListener('keydown', function(e) {
+            keyPressed[e.key + e.location] = true;
+
+            if(keyPressed.Shift1 == true && keyPressed.Control1 == true)
+                keyPressed = {};
+            if(keyPressed.Shift2 == true && keyPressed.Control2 == true)
+                keyPressed = {};
+
+            onkeydown_control(keyPressed);
+        }, false);
+
+        document.addEventListener('keyup', function(e) {
+            keyPressed[e.key + e.location] = false;
+
+            keyPressed = {};
+
+            onkeyup_control(keyPressed);
+        }, false);
+    </script>
+    <script>
+        var ipc = require('electron').ipcRenderer;
+        
+        var div = document.getElementsByClassName('direction')[0];
+        var distance = document.getElementById('distance');
+        var sent = document.getElementById('sent');
+
+        var direction;
+
+        ipc.on('data', (event, d) => {
+            distance.innerHTML = d.toString() + 'cm';
+        });
+
+        function onkeydown_control(keyPressed) {
+            direction = 0;
+
+            if(keyPressed['ArrowUp0'] == true)
+                direction += 1;
+
+            if(keyPressed['ArrowDown0'] == true)
+                direction += -1;
+
+            if(keyPressed['ArrowLeft0'] == true)
+                direction += -3;
+
+            if(keyPressed['ArrowRight0'] == true)
+                direction += 3;
+
+            print_arrow(direction);
+            sent.innerHTML = direction;
+
+            ipc.send('direction', direction.toString());
+        }
+
+        function onkeyup_control(keyPressed) {
+            div.innerHTML = '';
+        }
+
+        function print_arrow(direction) {
+            switch(direction) {
+                case 1:
+                    div.innerHTML = '↑';
+                    break;
+                case -1:
+                    div.innerHTML = '↓';
+                    break;
+                case -3:
+                    div.innerHTML = '←';
+                    break;
+                case 3:
+                    div.innerHTML = '→';
+                    break;
+                case -2:
+                    div.innerHTML = '↖';
+                    break;
+                case 4:
+                    div.innerHTML = '↗';
+                    break;
+                case -4:
+                    div.innerHTML = '↙';
+                    break;
+                case 2:
+                    div.innerHTML = '↘';
+                    break;
+                case 0:
+                    div.innerHTML = '';
+                    break;
+            }
+        }
+    </script>
+</html>

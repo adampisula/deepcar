@@ -1,0 +1,35 @@
+@font-face {
+    src: url('./Merriweather-Regular.ttf');
+    font-family: 'Merriweather';
+}
+
+body {
+    background: #222;
+}
+
+.direction {
+    color: white;
+    font-size: 200px;
+    font-family: 'Merriweather';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.data {
+    display: inline-block;
+    position: absolute;
+    top: 3px;
+    color: white;
+    font-family: monospace;
+    margin: 0;
+}
+
+#distance {
+    right: 5px;
+}
+
+#sent {
+    left: 5px;
+}
