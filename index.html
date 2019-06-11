@@ -37,6 +37,7 @@
         var sent = document.getElementById('sent');
 
         var direction;
+        var active;
 
         ipc.on('data', (event, d) => {
             distance.innerHTML = d.toString() + 'cm';
@@ -60,11 +61,19 @@
             print_arrow(direction);
             sent.innerHTML = direction;
 
-            ipc.send('direction', direction.toString());
+            if(direction != active) {
+                active = direction;
+
+                ipc.send('direction', active.toString());
+            }
         }
 
         function onkeyup_control(keyPressed) {
             div.innerHTML = '';
+            sent.innerHTML = '';
+            
+            active = 0;
+            ipc.send('direction', active.toString());
         }
 
         function print_arrow(direction) {
